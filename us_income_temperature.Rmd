@@ -1,0 +1,102 @@
+---
+title: "income_temperature"
+output: pdf_document
+---
+
+```{r, echo=FALSE, include=FALSE}
+library(tidyverse)
+library(knitr)
+library(rpart)
+library(partykit)
+opts_chunk$set(warning = FALSE, message = FALSE)
+```
+
+```{r}
+# load data sets
+income <- read_csv('IRSIncomeByZipCode.csv')
+zips <- read_csv('uszips.csv')
+```
+
+```{r}
+# tidy data to only include variables that will be used
+income <- income %>% select(index,
+                            ZIPCODE,
+                            `Adjusted gross income (AGI)`)
+
+zips <- zips %>% select(zip,
+                        lat,
+                        lng,
+                        city,
+                        state_id)
+
+# rename some columns in <income>
+income <- income %>%
+  rename(
+    zip = ZIPCODE,
+    agi = `Adjusted gross income (AGI)`
+  )
+
+# create new variable that contains the 10th percentile
+income <- income %>% 
+  mutate(percentile = case_when(agi <= 33003 ~ "0%",
+                                agi > 33003 & agi <= 67463 ~ "75%",
+                                agi > 67463 & agi <= 122500 ~ "50%",
+                                agi > 122500 ~ "25%"))
+```
+
+```{r}
+# only consider continental U.S. 
+zips <- zips %>%
+  filter(lat < 49,
+         lat > 24.5465)
+
+# filter out the top 1% of earners
+# https://www.investopedia.com/personal-finance/how-much-income-puts-you-top-1-5-10/
+# income <- income %>% 
+#   filter(agi <= 823763)
+```
+
+```{r}
+# left merge
+location_income <- merge(x = income, y = zips, by = "zip")
+```
+
+```{r}
+location_income %>% ggplot(aes(x = lat, y = agi)) +
+  geom_point(alpha = 0.5) + 
+  geom_smooth(method = 'lm', se = FALSE) +
+  facet_wrap(~percentile, scales = "free") +
+  theme_minimal()
+```
+
+```{r}
+location_income %>% 
+  filter(agi < 504420) %>% 
+  ggplot(aes(x = lat, y = agi)) +
+  geom_point(alpha = 0.5) + 
+  geom_smooth(method = 'lm', se = FALSE) +
+  theme_minimal()
+```
+
+```{r}
+location_income %>% 
+  filter(agi < 504420) %>% 
+  ggplot(aes(x = lat, y = agi)) +
+  geom_point(alpha = 0.5) + 
+  geom_smooth(se = FALSE) +
+  theme_minimal()
+```
+
+```{r}
+model1 <- lm(agi ~ lat, data = location_income)
+summary(model1)$coefficients
+cor(x = location_income$lat, y = location_income$agi)
+summary(model1)$r.squared
+```
+
+*Bibliography
+
+https://wid.world/data/
+https://en.wikipedia.org/wiki/List_of_countries_by_average_yearly_temperature
+https://dqydj.com/average-median-top-household-income-percentiles/
+https://www.kaggle.com/datasets/satoshidatamoto/irs-income-by-zip-code-a-deeper-looke?select=IRSIncomeByZipCode.csv
