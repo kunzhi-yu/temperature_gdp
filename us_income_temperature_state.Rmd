@@ -1,0 +1,69 @@
+---
+title: "income_temperature"
+output: pdf_document
+---
+
+```{r, echo=FALSE, include=FALSE}
+library(tidyverse)
+library(knitr)
+opts_chunk$set(warning = FALSE, message = FALSE)
+```
+
+```{r}
+# load data sets
+income <- read_csv('bea_download.csv')
+state_temps <- read_csv('statetemps.csv')
+```
+
+```{r}
+# tidy data to only include variables that will be used
+income <- income %>% select(GeoName,
+                            `2021:Q4`)
+
+# rename columns in <income>
+income <- income %>%
+  rename(
+    State = GeoName,
+    avg_income = `2021:Q4`
+  )
+```
+
+```{r}
+# left merge
+state_temps_income <- merge(x = income, y = state_temps, by = "State")
+```
+
+```{r}
+state_temps_income <- state_temps_income %>% 
+  select(State,
+         avg_income,
+         `Avg C`) %>% 
+  rename(state = State,
+         temp = `Avg C`)
+```
+
+```{r}
+state_temps_income %>%
+  ggplot(aes(x = temp, y = avg_income)) +
+  geom_point(alpha = 0.5) + 
+  geom_smooth(method = 'lm', se = FALSE) +
+  theme_minimal()
+```
+
+```{r}
+model1 <- lm(avg_income ~ temp, data = state_temps_income)
+summary(model1)$coefficients
+cor(x = state_temps_income$temp, y = state_temps_income$avg_income)
+summary(model1)$r.squared
+```
+
+
+## Bibliography
+
+https://wid.world/data/
+https://en.wikipedia.org/wiki/List_of_countries_by_average_yearly_temperature
+https://dqydj.com/average-median-top-household-income-percentiles/
+https://www.kaggle.com/datasets/satoshidatamoto/irs-income-by-zip-code-a-deeper-looke?select=IRSIncomeByZipCode.csv
+https://worldpopulationreview.com/states/state-abbreviations
+https://www.currentresults.com/Weather/US/average-annual-state-temperatures.php
+https://apps.bea.gov/iTable/iTable.cfm?reqid=70&step=1&acrdn=2
