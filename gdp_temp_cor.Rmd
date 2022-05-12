@@ -107,7 +107,6 @@ world_temp <- world_temp %>%
     country = Country,
     temp = `Average yearly temperature (1961–1990 Celsius)`
   )
-
 ```
 
 ```{r}
