@@ -10,19 +10,19 @@ opts_chunk$set(warning = FALSE, message = FALSE)
 ```
 
 ```{r}
-world_gdp <- read_csv('API_NY.GDP.MKTP.CD_DS2_en_csv_v2_4019306.csv')
+world_gdp <- read_csv('API_NY.GDP.PCAP.CD_DS2_en_csv_v2_4019678.csv')
 ```
 
 ```{r}
 world_gdp <- world_gdp %>%
   rename(
-    gdp = `...49`,
-    country = `Data Source`
+    gdp = `2019`,
+    country = `...1`
     ) %>% 
   select(
     country,
     gdp
-  ) %>% 
+    ) %>% 
   na.omit(world_gdp)
 
 temperature <- read_csv('table-1.csv')
