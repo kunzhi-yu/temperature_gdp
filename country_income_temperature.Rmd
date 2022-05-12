@@ -41,10 +41,6 @@ temperature_gdp <- merge(x = world_gdp, y = temperature, by = "country")
 ```
 
 ```{r}
-temperature_income$temp <- as.numeric(temperature_income$temp)
-```
-
-```{r}
 temperature_gdp %>% ggplot(aes(x = temp, y = gdp)) +
   geom_point() + 
   geom_smooth(method = 'lm', se = FALSE) +
