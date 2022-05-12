@@ -10,14 +10,25 @@ opts_chunk$set(warning = FALSE, message = FALSE)
 ```
 
 ```{r}
-income <- read_csv('wid_data.csv')
-income <- income %>%
+world_gdp <- read_csv('API_NY.GDP.MKTP.CD_DS2_en_csv_v2_4019306.csv')
+```
+
+```{r}
+world_gdp <- world_gdp %>%
   rename(
-    avg_income = `National Income Total Population`)
+    gdp = `...49`,
+    country = `Data Source`
+    ) %>% 
+  select(
+    country,
+    gdp
+  ) %>% 
+  na.omit(world_gdp)
 
 temperature <- read_csv('table-1.csv')
 temperature <- temperature %>% 
   rename(
+    country = Country,
     temp = `Average yearly temperature (1961–1990 Celsius)`
   )
 
@@ -25,7 +36,7 @@ temperature <- temperature %>%
 
 ```{r}
 # left merge
-temperature_income <- merge(x = income, y = temperature, by = "Country")
+temperature_gdp <- merge(x = world_gdp, y = temperature, by = "country")
 ```
 
 ```{r}
@@ -33,15 +44,15 @@ temperature_income$temp <- as.numeric(temperature_income$temp)
 ```
 
 ```{r}
-temperature_income %>% ggplot(aes(x = temp, y = avg_income)) +
+temperature_gdp %>% ggplot(aes(x = temp, y = gdp)) +
   geom_point(alpha = 0.5) + 
   geom_smooth(method = 'lm', se = FALSE) +
   theme_classic()
 ```
 
 ```{r}
-model1 <- lm(avg_income ~ temp, data = temperature_income)
+model1 <- lm(gdp ~ temp, data = temperature_gdp)
 summary(model1)$coefficients
-cor(x = temperature_income$temp, y = temperature_income$avg_income)
+cor(x = temperature_gdp$temp, y = temperature_gdp$gdp)
 summary(model1)$r.squared
 ```
