@@ -1,6 +1,8 @@
 # Study in the Correlation between Temperature and Income
-**A personal project by Alex Yu**
+**A ongoing personal project by Alex Yu**
+
 [Read the paper here](https://github.com/kunzhi-yu/temperature_gdp/blob/master/gdp_temp_cor.pdf)
+
 [Review the code here](https://github.com/kunzhi-yu/temperature_gdp/blob/master/gdp_temp_cor.Rmd)
 
 ## Background
