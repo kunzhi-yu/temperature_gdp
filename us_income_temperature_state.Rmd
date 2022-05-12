@@ -19,10 +19,10 @@ state_temps <- read_csv('statetemps.csv')
 # tidy data to only include variables that will be used. Rename columns.
 income <- income %>% 
   select(GeoName,
-         `2021:Q4`)%>%
+         `2019`)%>%
   rename(
     State = GeoName,
-    avg_income = `2021:Q4`
+    avg_income = `2019`
   )
 ```
 
@@ -54,7 +54,7 @@ linear_model <- lm(avg_income ~ temp, data = state_temps_income)
 summary(linear_model)$coefficients
 ```
 
-The Pearson correlation coefficient, $r$, is `r cor(x = state_temps_income$temp, y = state_temps_income$avg_income)`. The coefficient of determination, $r^2$, is `r summary(linear_model)$r.squared`.
+The Pearson correlation coefficient, $r$, is `r round(cor(x = state_temps_income$temp, y = state_temps_income$avg_income), digits = 4)`. The coefficient of determination, $r^2$, is `r round(summary(linear_model)$r.squared, digits = 4)`.
 
 ## Bibliography
 

@@ -6,8 +6,6 @@ output: pdf_document
 ```{r, echo=FALSE, include=FALSE}
 library(tidyverse)
 library(knitr)
-library(rpart)
-library(partykit)
 opts_chunk$set(warning = FALSE, message = FALSE)
 ```
 
@@ -15,10 +13,7 @@ opts_chunk$set(warning = FALSE, message = FALSE)
 income <- read_csv('wid_data.csv')
 income <- income %>%
   rename(
-    avg_income = `anninc_992_i_2021
-National income
-Total population | average income or wealth | adults | individual |  | ppp | constant (2021)
-2021`)
+    avg_income = `National Income Total Population`)
 
 temperature <- read_csv('table-1.csv')
 temperature <- temperature %>% 
@@ -29,6 +24,7 @@ temperature <- temperature %>%
 ```
 
 ```{r}
+# left merge
 temperature_income <- merge(x = income, y = temperature, by = "Country")
 ```
 
@@ -40,7 +36,7 @@ temperature_income$temp <- as.numeric(temperature_income$temp)
 temperature_income %>% ggplot(aes(x = temp, y = avg_income)) +
   geom_point(alpha = 0.5) + 
   geom_smooth(method = 'lm', se = FALSE) +
-  theme_minimal()
+  theme_classic()
 ```
 
 ```{r}
