@@ -10,7 +10,7 @@ opts_chunk$set(include = FALSE)
 ```
 
 ```{r}
-# load data sets
+# load data sets for states analysis
 state_gdp <- read_csv('bea_download.csv')
 state_temps <- read_csv('statetemps.csv')
 state_pop <- read_csv('nst-est2019-alldata.csv')
@@ -83,7 +83,51 @@ cor(x = state_temps_gdppc$temp, y = state_temps_gdppc$gdp_per_cap)
 summary(states_lm)$r.squared
 ```
 
-The Pearson correlation coefficient, $r$, is `r cor(x = state_temps_gdppc$temp, y = state_temps_gdppc$gdp_per_cap)`. The coefficient of determination, $r^2$, is `r summary(states_lm)$r.squared`.
+
+```{r}
+# read data for world
+world_gdp <- read_csv('API_NY.GDP.PCAP.CD_DS2_en_csv_v2_4019678.csv')
+world_temp <- read_csv('table-1.csv')
+```
+
+```{r}
+world_gdp <- world_gdp %>%
+  rename(
+    gdp = `2019`,
+    country = `...1`
+    ) %>% 
+  select(
+    country,
+    gdp
+    ) %>% 
+  na.omit(world_gdp)
+
+world_temp <- world_temp %>% 
+  rename(
+    country = Country,
+    temp = `Average yearly temperature (1961–1990 Celsius)`
+  )
+
+```
+
+```{r}
+# left merge
+global_temps_gdppc <- merge(x = world_gdp, y = world_temp, by = "country")
+```
+
+```{r}
+global_temps_gdppc %>% ggplot(aes(x = temp, y = gdp)) +
+  geom_point() + 
+  geom_smooth(method = 'lm', se = FALSE) +
+  theme_classic()
+```
+
+```{r}
+global_lm <- lm(gdp ~ temp, data = global_temps_gdppc)
+summary(global_lm)$coefficients
+cor(x = global_temps_gdppc$temp, y = global_temps_gdppc$gdp)
+summary(global_lm)$r.squared
+```
 
 ## Bibliography
 
