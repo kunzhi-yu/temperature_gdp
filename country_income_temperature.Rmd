@@ -10,7 +10,9 @@ opts_chunk$set(warning = FALSE, message = FALSE)
 ```
 
 ```{r}
+# read data
 world_gdp <- read_csv('API_NY.GDP.PCAP.CD_DS2_en_csv_v2_4019678.csv')
+temperature <- read_csv('table-1.csv')
 ```
 
 ```{r}
@@ -25,7 +27,6 @@ world_gdp <- world_gdp %>%
     ) %>% 
   na.omit(world_gdp)
 
-temperature <- read_csv('table-1.csv')
 temperature <- temperature %>% 
   rename(
     country = Country,
@@ -45,7 +46,7 @@ temperature_income$temp <- as.numeric(temperature_income$temp)
 
 ```{r}
 temperature_gdp %>% ggplot(aes(x = temp, y = gdp)) +
-  geom_point(alpha = 0.5) + 
+  geom_point() + 
   geom_smooth(method = 'lm', se = FALSE) +
   theme_classic()
 ```
