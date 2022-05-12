@@ -6,7 +6,7 @@ output: pdf_document
 ```{r, echo=FALSE, include=FALSE}
 library(tidyverse)
 library(knitr)
-opts_chunk$set(warning = FALSE, message = FALSE)
+opts_chunk$set(include = FALSE)
 ```
 
 ```{r}
@@ -16,12 +16,10 @@ state_temps <- read_csv('statetemps.csv')
 ```
 
 ```{r}
-# tidy data to only include variables that will be used
-income <- income %>% select(GeoName,
-                            `2021:Q4`)
-
-# rename columns in <income>
-income <- income %>%
+# tidy data to only include variables that will be used. Rename columns.
+income <- income %>% 
+  select(GeoName,
+         `2021:Q4`)%>%
   rename(
     State = GeoName,
     avg_income = `2021:Q4`
@@ -29,11 +27,12 @@ income <- income %>%
 ```
 
 ```{r}
-# left merge
+# left merge.
 state_temps_income <- merge(x = income, y = state_temps, by = "State")
 ```
 
 ```{r}
+# tidy data to only include variables that will be used. Rename columns.
 state_temps_income <- state_temps_income %>% 
   select(State,
          avg_income,
@@ -42,28 +41,24 @@ state_temps_income <- state_temps_income %>%
          temp = `Avg C`)
 ```
 
-```{r}
+```{r, include = TRUE, echo = FALSE, message = FALSE}
 state_temps_income %>%
   ggplot(aes(x = temp, y = avg_income)) +
-  geom_point(alpha = 0.5) + 
+  geom_point() + 
   geom_smooth(method = 'lm', se = FALSE) +
-  theme_minimal()
+  theme_classic()
 ```
 
-```{r}
-model1 <- lm(avg_income ~ temp, data = state_temps_income)
-summary(model1)$coefficients
-cor(x = state_temps_income$temp, y = state_temps_income$avg_income)
-summary(model1)$r.squared
+```{r, include = TRUE, echo = FALSE}
+linear_model <- lm(avg_income ~ temp, data = state_temps_income)
+summary(linear_model)$coefficients
 ```
 
+The Pearson correlation coefficient, $r$, is `r cor(x = state_temps_income$temp, y = state_temps_income$avg_income)`. The coefficient of determination, $r^2$, is `r summary(linear_model)$r.squared`.
 
 ## Bibliography
 
 https://wid.world/data/
 https://en.wikipedia.org/wiki/List_of_countries_by_average_yearly_temperature
-https://dqydj.com/average-median-top-household-income-percentiles/
-https://www.kaggle.com/datasets/satoshidatamoto/irs-income-by-zip-code-a-deeper-looke?select=IRSIncomeByZipCode.csv
-https://worldpopulationreview.com/states/state-abbreviations
 https://www.currentresults.com/Weather/US/average-annual-state-temperatures.php
 https://apps.bea.gov/iTable/iTable.cfm?reqid=70&step=1&acrdn=2
