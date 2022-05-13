@@ -21,15 +21,17 @@ state_pop <- read_csv('nst-est2019-alldata.csv')
 ```
 
 ```{r}
-# tidy data to only include variables that will be used. Rename columns.
+# tidy data to only inc lude variables that will be used. Rename columns.
 state_gdp <- state_gdp %>% 
-  select(GeoName,
-         `2019`)%>%
   rename(
     State = GeoName,
     gdp = `2019`
+  ) %>% 
+  select(
+    State,
+    gdp
   )
-
+  
 state_pop <- state_pop %>% 
   rename(
     State = NAME,
@@ -38,7 +40,7 @@ state_pop <- state_pop %>%
   select(
     State,
     pop
-  )
+    )
 ```
 
 ```{r}
