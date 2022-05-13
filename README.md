@@ -1,4 +1,4 @@
-# Study in the Correlation between Temperature and Income
+# Study in the Correlation between Temperature and GDP per capita 
 **A ongoing personal project by Alex Yu**
 
 [Read the paper here](https://github.com/kunzhi-yu/temperature_gdp/blob/master/gdp_temp_cor.pdf)
