@@ -1,9 +1,13 @@
 ---
-title: "income_temperature"
+title: "The Correlation between Temperature and GDP per capita"
+author: "Kunzhi (Alex) Yu"
 output: pdf_document
 ---
 
-```{r, echo=FALSE, include=FALSE}
+## Introduction
+
+
+```{r setup, echo=FALSE, include=FALSE}
 library(tidyverse)
 library(knitr)
 opts_chunk$set(include = FALSE)
@@ -114,7 +118,7 @@ world_temp <- world_temp %>%
 global_temps_gdppc <- merge(x = world_gdp, y = world_temp, by = "country")
 ```
 
-```{r}
+```{r, include = TRUE, echo = FALSE, message = FALSE}
 global_temps_gdppc %>% ggplot(aes(x = temp, y = gdp)) +
   geom_point() + 
   geom_smooth(method = 'lm', se = FALSE) +
