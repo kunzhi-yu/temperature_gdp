@@ -1,6 +1,7 @@
 ---
 title: "The Correlation between Temperature and GDP per capita"
 author: "Kunzhi (Alex) Yu"
+date: "May 31, 2022"
 output: pdf_document
 ---
 
@@ -75,20 +76,26 @@ state_temps_gdppc <- state_temps_gdppc %>%
 ```
 
 ```{r, include = TRUE, echo = FALSE, message = FALSE}
+# plot temperature in C versus GDP per capita
 state_temps_gdppc %>%
   ggplot(aes(x = temp, y = gdp_per_cap)) +
-  geom_point() + 
-  geom_smooth(method = 'lm', se = FALSE) +
-  theme_classic()
+  geom_point(alpha = 0.5) + 
+  geom_smooth(method = 'lm', se = FALSE, formula = y~x) +
+  labs(
+    x = "Temperature / Degrees Celsius",
+    y = "GDP per Capita / USD"
+  ) +
+  ggtitle("GDP per Capita Versus Temperature in Each U.S. State") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5))
 ```
 
 ```{r}
+# print regression details
 states_lm <- lm(gdp_per_cap ~ temp, data = state_temps_gdppc)
-summary(states_lm)$coefficients
 cor(x = state_temps_gdppc$temp, y = state_temps_gdppc$gdp_per_cap)
-summary(states_lm)$r.squared
+summary(states_lm)
 ```
-
 
 ```{r}
 # read data for world
@@ -97,14 +104,15 @@ world_temp <- read_csv('table-1.csv')
 ```
 
 ```{r}
+# wrangle data. rename variables and select variables that will be used.
 world_gdp <- world_gdp %>%
   rename(
-    gdp = `2019`,
+    gdppc = `2019`,
     country = `...1`
     ) %>% 
   select(
     country,
-    gdp
+    gdppc
     ) %>% 
   na.omit(world_gdp)
 
@@ -121,17 +129,25 @@ global_temps_gdppc <- merge(x = world_gdp, y = world_temp, by = "country")
 ```
 
 ```{r, include = TRUE, echo = FALSE, message = FALSE}
-global_temps_gdppc %>% ggplot(aes(x = temp, y = gdp)) +
-  geom_point() + 
-  geom_smooth(method = 'lm', se = FALSE) +
-  theme_classic()
+# plot temperature versus GDP per capita
+global_temps_gdppc %>% 
+  ggplot(aes(x = temp, y = gdppc)) +
+  geom_point(alpha = 0.5) + 
+  geom_smooth(method = 'lm', se = FALSE, formula = y ~ x) + 
+  labs(
+    x = "Temperature / Degrees Celsius",
+    y = "GDP per Capita / USD"
+  ) +
+  ggtitle("GDP per Capita Versus Temperature in Each Country") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5))
 ```
 
 ```{r}
-global_lm <- lm(gdp ~ temp, data = global_temps_gdppc)
-summary(global_lm)$coefficients
+# regression details
+global_lm <- lm(gdppc ~ temp, data = global_temps_gdppc)
 cor(x = global_temps_gdppc$temp, y = global_temps_gdppc$gdp)
-summary(global_lm)$r.squared
+summary(global_lm)
 ```
 
 ## Bibliography
