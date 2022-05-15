@@ -16,9 +16,10 @@ opts_chunk$set(include = FALSE)
 
 ```{r}
 # load data sets for states analysis
-state_gdp <- read_csv('bea_download.csv')
-state_temps <- read_csv('statetemps.csv')
-state_pop <- read_csv('nst-est2019-alldata.csv')
+setwd('C:/Users/yukun/Personal/Projects/stats projects/temperature_gdp')
+state_gdp <- read_csv('./data/bea_download.csv')
+state_temps <- read_csv('./data/statetemps.csv')
+state_pop <- read_csv('./data/nst-est2019-alldata.csv')
 ```
 
 ```{r}
@@ -99,8 +100,8 @@ summary(states_lm)
 
 ```{r}
 # read data for world
-world_gdp <- read_csv('API_NY.GDP.PCAP.CD_DS2_en_csv_v2_4019678.csv')
-world_temp <- read_csv('table-1.csv')
+world_gdp <- read_csv('./data/API_NY.GDP.PCAP.CD_DS2_en_csv_v2_4019678.csv')
+world_temp <- read_csv('./data/table-1.csv')
 ```
 
 ```{r}
