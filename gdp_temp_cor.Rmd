@@ -8,6 +8,13 @@ output: pdf_document
 ## Introduction
 
 
+
+## Data Overview
+
+Data for the international analysis was taken from the World Inequality Database and the Tyndall Centre. State data was taken from the Bureau of Economic Analysis, NOAA, and the U.S. Census Bureau.
+  
+It is important to note some limitations with the data. Firstly, the temperature data was taken over different periods. While the U.S. temperature averages were taken from 1971 to 2000, the international data was collected 1961 to 1990 — a decade's difference.
+
 ```{r setup, echo=FALSE, include=FALSE}
 library(tidyverse)
 library(knitr)
@@ -23,7 +30,7 @@ state_pop <- read_csv('./data/nst-est2019-alldata.csv')
 ```
 
 ```{r}
-# tidy data to only inc lude variables that will be used. Rename columns.
+# tidy data to only include variables that will be used. Rename columns.
 state_gdp <- state_gdp %>% 
   rename(
     State = GeoName,
@@ -81,7 +88,7 @@ state_temps_gdppc <- state_temps_gdppc %>%
 state_temps_gdppc %>%
   ggplot(aes(x = temp, y = gdp_per_cap)) +
   geom_point(alpha = 0.5) + 
-  geom_smooth(method = 'lm', se = FALSE, formula = y~x) +
+  geom_smooth(method = 'lm', se = FALSE, formula = y ~ x) +
   labs(
     x = "Temperature / Degrees Celsius",
     y = "GDP per Capita / USD"
