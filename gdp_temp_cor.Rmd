@@ -11,9 +11,11 @@ output: pdf_document
 
 ## Data Overview
 
-Data for the international analysis was taken from the World Inequality Database and the Tyndall Centre. State data was taken from the Bureau of Economic Analysis, NOAA, and the U.S. Census Bureau.
-  
-It is important to note some limitations with the data. Firstly, the temperature data was taken over different periods. While the U.S. temperature averages were taken from 1971 to 2000, the international data was collected 1961 to 1990 — a decade's difference.
+Data for the international analysis was taken from the World Inequality Database and the Tyndall Centre. State data was taken from the Bureau of Economic Analysis, NOAA, and the U.S. Census Bureau. The main limitation of the data is that the temperature data was taken over different periods. While the U.S. temperature averages were taken from 1971 to 2000, the international data was collected 1961 to 1990 — a decade's difference.
+
+## International Analysis
+
+
 
 ```{r setup, echo=FALSE, include=FALSE}
 library(tidyverse)
