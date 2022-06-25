@@ -5,6 +5,13 @@ date: "May 31, 2022"
 output: pdf_document
 ---
 
+```{r setup, echo=FALSE, include=FALSE}
+library(tidyverse)
+library(knitr)
+opts_chunk$set(include = FALSE)
+```
+
+
 ## Introduction
 
 
@@ -16,12 +23,6 @@ Data for the international analysis was taken from the World Inequality Database
 ## International Analysis
 
 
-
-```{r setup, echo=FALSE, include=FALSE}
-library(tidyverse)
-library(knitr)
-opts_chunk$set(include = FALSE)
-```
 
 ```{r}
 # load data sets for states analysis
